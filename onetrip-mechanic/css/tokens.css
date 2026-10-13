@@ -1,0 +1,48 @@
+/* OneTrip Mechanic design tokens — same charcoal/brass system as
+   onetrip-admin (see that repo's css/tokens.css) for ecosystem consistency.
+   Copied rather than shared, since these are three separate static-site
+   repos with no shared build step — keep this file in sync by hand if the
+   palette ever changes. */
+
+:root {
+  /* Surfaces */
+  --bg-base: #1C1B19;
+  --bg-surface: #252320;
+  --bg-surface-raised: #2C2A25;
+
+  /* Borders */
+  --border: #302D28;
+  --border-strong: #38352E;
+
+  /* Text */
+  --text-primary: #EDEAE2;
+  --text-secondary: #8C897E;
+  --text-muted: #7A776E;
+
+  /* Accent — brass gold. Primary buttons and active/selected states. */
+  --accent: #B8934D;
+  --accent-on: #1C1204;
+
+  /* Status — clean/defect badges, same as admin. */
+  --status-clean-bg: #1E3327;
+  --status-clean-text: #6FBF8B;
+  --status-defect-bg: #3A211D;
+  --status-defect-text: #E2695A;
+
+  /* Shape */
+  --radius: 2px;
+
+  /* Type */
+  --font-heading: 'Source Serif Pro', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+
+  /* Interaction — desktop/tablet-first, same reasoning as admin. */
+  --tap-min: 44px;
+}
