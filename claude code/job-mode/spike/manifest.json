@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Job Mode - Phase 0 spike",
+  "version": "0.0.1",
+  "description": "Throwaway test: can the side panel and a full tab read and write a local folder?",
+  "permissions": ["sidePanel", "storage"],
+  "action": { "default_title": "Job Mode spike" },
+  "side_panel": { "default_path": "panel.html" },
+  "background": { "service_worker": "background.js" }
+}

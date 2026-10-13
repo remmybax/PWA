@@ -1,0 +1,42 @@
+/* OneTrip design tokens — the ONLY place any color, font, radius, or tap
+   target value is defined. Every other file references these by name.
+   Swapping the palette later means editing this file, not hunting through
+   components. */
+
+:root {
+  /* Surfaces */
+  --bg-base: #FFFFFF;
+  --bg-surface: #FAFAF8; /* photo slots, elevated panels */
+
+  /* Borders */
+  --border: #ECECEC;
+  --border-strong: #E4E4E0;
+
+  /* Text */
+  --text-primary: #161616;
+  --text-secondary: #6E6E6E;
+  --text-muted: #9B9B9B;
+
+  /* Ink — primary buttons, wordmark, icon fill, and any other UI that
+     needs a strong neutral (everything that isn't specifically one of the
+     three --accent uses below). */
+  --ink: #161616;
+  --ink-on: #FFFFFF; /* text/icon color on top of an --ink fill */
+
+  /* Accent — muted gold. Reserved for exactly three things in the whole
+     app: the open-defect count, the day-streak number, and the progress-
+     bar fill. Never a general warning/highlight color, and never used for
+     an individual per-item state (a single Fail toggle is neutral --ink,
+     like Pass/N/A — only the aggregate count gets this color). */
+  --accent: #9C7A34;
+
+  /* Shape */
+  --radius: 2px;
+
+  /* Type */
+  --font-heading: 'Source Serif Pro', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+
+  /* Interaction — sunlight-and-gloves environment, every tap target. */
+  --tap-min: 56px;
+}

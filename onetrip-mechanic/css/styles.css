@@ -1,0 +1,438 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.app-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  max-width: 480px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Sign-in / loading / error screens — centered, full height. Same pattern
+   as onetrip-admin. */
+.signin-screen,
+.loading-screen,
+.error-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 100vh;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.btn-primary {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--accent-on);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.btn-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+}
+
+.btn-text:hover {
+  color: var(--text-primary);
+}
+
+.error-text {
+  color: var(--status-defect-text);
+  font-size: 15px;
+  max-width: 480px;
+}
+
+.empty-state {
+  color: var(--text-secondary);
+}
+
+/* Open Defects Dashboard */
+.defects-screen {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.back-link {
+  padding: 0;
+}
+
+/* Certify Fixed confirmation — same clean-status colors as admin's
+   "clean" badge, since that's exactly what it's reporting. */
+.success-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  background: var(--status-clean-bg);
+  color: var(--status-clean-text);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-4);
+  font-size: 14px;
+}
+
+.success-banner-dismiss {
+  color: var(--status-clean-text);
+  flex-shrink: 0;
+}
+
+.success-banner-dismiss:hover {
+  color: var(--text-primary);
+}
+
+.defect-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.defect-card {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.defect-card:hover {
+  border-color: var(--border-strong);
+}
+
+.defect-photo {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface-raised);
+}
+
+.defect-photo-unavailable {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-surface-raised);
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+  padding: var(--space-1);
+}
+
+.defect-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.defect-truck {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.defect-station {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.defect-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Resolved History (Screen 3) — same row shape as .defect-card, but it's
+   not a button (nothing to drill into further) and has no urgency badge. */
+.history-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  color: var(--text-primary);
+}
+
+.history-notes {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+.defect-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  justify-self: end;
+}
+
+.days-open-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  background: var(--status-defect-bg);
+  color: var(--status-defect-text);
+}
+
+.days-open-badge-fresh {
+  background: var(--bg-surface-raised);
+  color: var(--text-secondary);
+}
+
+.flagged-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Phone: stack the card into two rows instead of a cramped 3-col grid.
+   719px matches onetrip-admin's own breakpoint convention. */
+@media (max-width: 719px) {
+  .defect-card {
+    grid-template-columns: 72px 1fr;
+    grid-template-areas:
+      "photo info"
+      "photo side";
+  }
+  .defect-photo,
+  .defect-photo-unavailable {
+    grid-area: photo;
+    width: 72px;
+    height: 72px;
+  }
+  .defect-info {
+    grid-area: info;
+  }
+  .defect-side {
+    grid-area: side;
+    align-items: flex-start;
+  }
+}
+
+/* Individual Defect View (Screen 2) */
+
+.detail-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.detail-zone {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+
+.detail-station-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  margin: 0 0 var(--space-2);
+}
+
+.detail-item-label {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-3);
+}
+
+.detail-photo {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  margin-bottom: var(--space-3);
+}
+
+.detail-photo-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: var(--space-3);
+}
+
+.detail-flagged-by {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Certify Repair form */
+
+.certify-form {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.certify-heading {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  margin: 0 0 var(--space-2);
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: var(--space-3) 0 var(--space-1);
+}
+
+.text-input {
+  font-family: var(--font-body);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  font-size: 15px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  min-height: var(--tap-min);
+  width: 100%;
+}
+
+.textarea-input {
+  min-height: 96px;
+  resize: vertical;
+  font: inherit;
+}
+
+.text-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.certify-photo-input {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.certify-photo-preview {
+  margin-top: var(--space-2);
+}
+
+.certify-photo-preview-img {
+  display: block;
+  max-width: 240px;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+}
+
+.certify-error {
+  margin: var(--space-3) 0 0;
+}
+
+.certify-form .btn-primary {
+  margin-top: var(--space-4);
+  align-self: flex-start;
+}

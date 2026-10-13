@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Mode harness</title>
+  <link rel="stylesheet" href="../extension/css/tokens.css">
+  <link rel="stylesheet" href="../extension/css/base.css">
+  <script>
+    // Stand-in for the extension APIs so the real pages run in a normal tab.
+    const listeners = [];
+    const store = {};
+    window.chrome = {
+      storage: {
+        local: {
+          async get(k) { return { [k]: store[k] }; },
+          async set(obj) {
+            const changes = {};
+            for (const [k, v] of Object.entries(obj)) { changes[k] = { oldValue: store[k], newValue: v }; store[k] = v; }
+            listeners.forEach((fn) => fn(changes));
+          },
+        },
+        onChanged: { addListener: (fn) => listeners.push(fn) },
+      },
+      tabs: { create: ({ url }) => window.open(url) },
+      runtime: { getURL: (p) => `../extension/${p}` },
+    };
+    // Real picker can't be automated; the harness pre-seeds the handle instead.
+    if (!('showDirectoryPicker' in window)) window.showDirectoryPicker = async () => { throw new Error('picker stub'); };
+  </script>
+</head>
+<body data-surface="tab">
+  <div id="app" class="app"></div>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+  <script type="module" src="harness.mjs"></script>
+</body>
+</html>

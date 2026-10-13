@@ -1,0 +1,141 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.muted { color: var(--muted); }
+.faint { color: var(--faint); }
+
+h1, h2, h3 { font-family: var(--font-head); margin: 0; }
+h1 { font-weight: 700; font-size: 26px; line-height: 1.15; }
+h2 {
+  font-weight: 700;
+  font-size: 18px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--text);
+}
+
+.app { min-height: 100vh; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+}
+.btn:hover { background: var(--hover); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.link { border-color: transparent; background: transparent; color: var(--accent); padding: 0 4px; }
+.btn.link:hover { text-decoration: underline; background: transparent; }
+.btn[disabled] { opacity: 0.55; cursor: default; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 700; font-size: 20px; }
+.topbar .spacer { flex: 1; }
+.sync-line { display: flex; align-items: center; gap: 6px; font-size: 13px; flex-wrap: wrap; }
+.flag-text { color: var(--flag); display: inline-flex; align-items: center; gap: 6px; }
+.ok-text { color: var(--ok); }
+
+/* ---------- Gate screens (choose / reconnect / unavailable) ---------- */
+.gate {
+  max-width: 560px;
+  margin: 64px auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.gate p { margin: 0; }
+.tree {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+.gate .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.error { color: var(--flag); }
+
+/* ---------- Phase 1 check page ---------- */
+.page { max-width: 1100px; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 24px; }
+.summary { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); border-top: 1px solid var(--line); }
+.fact {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.fact .n { font-family: var(--font-mono); font-size: 15px; }
+.fact.flagged .n, .fact.flagged .k { color: var(--flag); }
+.rows { list-style: none; margin: 0; padding: 0; }
+.rows li { padding: 8px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.rows .when { font-family: var(--font-mono); font-size: 12.5px; min-width: 120px; color: var(--muted); }
+
+/* ---------- Side panel ---------- */
+body[data-surface="panel"] .topbar { padding: 0 14px; min-height: 48px; }
+body[data-surface="panel"] .page { padding: 16px 14px 32px; gap: 18px; }
+body[data-surface="panel"] .gate { margin: 28px auto; }
+body[data-surface="panel"] h1 { font-size: 22px; }
+body[data-surface="panel"] .facts { grid-template-columns: 1fr; }
+
+/* ---------- Toasts ---------- */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+  max-width: calc(100vw - 32px);
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+}
+.toast.error { background: var(--flag); color: var(--bg); }

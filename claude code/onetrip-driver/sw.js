@@ -1,0 +1,224 @@
+// OneTrip service worker — caches the app shell for basic offline capability.
+// This is a cache-first strategy for the static shell only. Calls to the
+// Drive-upload Cloud Function are cross-origin ('cors' response type), and
+// the fetch handler below only caches same-origin ('basic') responses, so
+// they're never accidentally cached here — every upload attempt hits the
+// real network.
+
+// v5: UI restyle added css/tokens.css as a separate stylesheet. The Google
+// Fonts stylesheet/font files themselves are cross-origin and deliberately
+// NOT cached here (same reasoning as the Drive calls below) — offline
+// visits fall back to the system serif/sans in tokens.css's font stacks
+// rather than breaking. Deliberately does NOT eagerly cache
+// assets/baseline-photos/** here — that's 17MB+ for one truck already, and
+// growing. Those images pick up caching for free the first time they're
+// actually requested, via the runtime cache-and-store logic in the fetch
+// handler below — no separate cache-warming code needed.
+//
+// v6: second UI restyle (white/ink/gold token system, shield-checkmark
+// mark) — every SHELL_FILES entry below changed. This version bump is the
+// only thing that makes any already-installed service worker notice: the
+// browser only re-runs install/activate when sw.js's own bytes change, so
+// without it every device that had ever loaded the app before would stay
+// on the v5 cache — and therefore the old dark theme — forever, no matter
+// how many times it reloads.
+//
+// v7: v6 shipped a real race — GitHub Pages' CDN hadn't finished
+// propagating the new files at the exact moment some devices' install
+// event ran cache.addAll(SHELL_FILES), so those devices' "new" v6 cache
+// silently baked in stale content anyway. Bumping again is the only way
+// to give every device — including ones that already installed the
+// poisoned v6 cache — a clean, correct re-fetch.
+//
+// v8: Edit Truck/Driver Info screen's button label changed to "Start
+// Inspection" (js/app.js) — same reasoning as v6/v7, any text-only change
+// still needs a version bump or it never reaches an already-installed
+// device.
+//
+// v9: v8 raced CDN propagation too (same as v6/v7 before it) — this keeps
+// happening because a plain cache.addAll() below is a normal fetch, which
+// can still be satisfied by an edge cache that hasn't purged yet after a
+// deploy. Explicitly forcing cache: 'reload' on the install fetches (see
+// below) bypasses that instead of relying on timing/luck.
+//
+// v10: removed the capture-sound feature and its Setup-screen toggle
+// entirely (js/app.js, css/style.css) — no more settings control at all.
+//
+// v11: cleanup pass — dead .app-subtitle CSS rule removed, stale
+// Google-sign-in comment in app.js rewritten, completion screen's
+// certified-at timestamp now uses formatCertifiedAt() (js/app.js,
+// css/style.css, js/auth.js).
+//
+// v12: every export/upload now tags fleetId (js/state.js, js/drive.js) —
+// pairs with the backend's move to a hardcoded, drive.file-scoped root
+// folder (onetrip-drive-function/index.js, deployed separately).
+//
+// v13: Setup screen's truck number field changed from free text to a
+// dropdown restricted to KNOWN_TRUCKS (js/data.js, js/app.js) — no more
+// near-duplicate Drive folders from typos/trailing spaces on the same
+// truck.
+//
+// v14: added TEST001 as a second KNOWN_TRUCKS entry (js/data.js) — an
+// obviously-fake truck so future synthetic tests don't have to write into
+// 826016's real Drive folder.
+//
+// v15: Dan's first-day beta bug fixes — flash/torch toggle on the camera
+// overlay with honest "unavailable" feedback where torch isn't supported,
+// landscape orientation unlock/relock scoped to the camera overlay only,
+// and clarified driver/passenger/both-sides wording on stations 1a, 2a,
+// 3b (js/app.js, css/style.css, js/data.js).
+//
+// v16: same beta bug-fix pass, part 2 — new Station 1-door (Phase 1,
+// driver door DOT number placard: photo + typed value, mode: 'text') so
+// the number is captured once instead of twice; Station 12 now reuses that
+// same mode: 'text' control and is pre-filled from it at the Phase 2 -> 3
+// transition (js/data.js, js/state.js, js/app.js).
+//
+// v17: fixed the recurring scroll-jump-on-tap bug at its actual root cause
+// instead of patching another individual button — render() itself now
+// always defers its DOM teardown/rebuild to the next animation frame (see
+// its own comment in js/app.js), so no future control can reintroduce this
+// by calling render() straight from a click/blur handler. Removed the two
+// now-redundant manual requestAnimationFrame wrappers this same bug's
+// prior fix had added to just the numeric/text inputs' onblur.
+//
+// v18: v17 fixed the big scroll jump but surfaced a smaller side effect —
+// tapping Pass/Fail/N/A caused a slight visible "shake." Root cause: the
+// toggle button's native :active press/release has a 200ms eased
+// transition (css/style.css), but v17 also means that exact button gets
+// destroyed and replaced by a fresh element about one frame (~16ms) after
+// every tap. The 200ms release was always going to be cut off mid-flight
+// once a rebuild landed that close behind it — before v17, the rebuild
+// happened synchronously in the same tick as the tap, too fast for the
+// transition to ever visibly start, which is why this was never seen
+// before even though the transition/rebuild pairing was already there.
+// Removed the transition on .toggle-btn specifically (press/release now
+// instant) — confirmed via getComputedStyle that a freshly-created
+// replacement element never benefits from it anyway, since there's no
+// prior state on that specific node to ease in from.
+//
+// v19: reclaimed vertical space for the checklist itself — shrunk the
+// sticky phase-header's padding/title size (scoped to .phase-header so the
+// same bare .phase-title on the Transition/Summary screens is unaffected),
+// and removed the old certified-only "Back to Summary" / normal "Back to
+// Phase N" button from the bottom sticky-footer entirely, replacing it
+// with a small chevron in the header itself (resolveHeaderBackTarget in
+// js/app.js). The footer is now null (no bar at all) once certified, since
+// that button was its only content; Phase 2/3's footer is now just the
+// primary CTA. The Transition screen's own inline back button is a
+// separate, unrelated control and was left untouched.
+//
+// v20: closed a real gap in the update mechanism itself, present since v6:
+// skipWaiting() + clients.claim() below make a new service worker take
+// control in the background, but that alone never refreshes a page that's
+// already loaded and running — anyone with an older version installed
+// needed to reload TWICE after any deploy to actually see it (once,
+// invisibly, for the new worker to finish activating; a second time to
+// actually load the new bytes). This is very likely why v19's header/back-
+// button change and even the already-shipped v17/v18 scroll-jump/shake
+// fixes could still appear "not applied" or "reverted" on a device that
+// had an older version installed before visiting again — the code was
+// never actually reverted, the page just hadn't reloaded a second time
+// yet. js/app.js now listens for controllerchange and reloads
+// automatically the instant a new worker actually takes over, so one visit
+// is enough from here on. This fix closes the gap for every future deploy;
+// it can't retroactively help anyone still stuck on v19 or earlier reach
+// v20 itself (that transition is the one time the old two-reload behavior
+// still applies) — a single hard refresh gets them onto v20, after which
+// this self-heals permanently.
+//
+// v21: replaced full-screen re-renders on Pass/Fail/N/A taps with targeted,
+// in-place DOM updates (updateAfterToggleTap in js/app.js) — this is the
+// actual structural fix for the jump/shake bug pattern, not another patch
+// on top of v17/v18's timing-based fixes. A toggle tap no longer calls
+// render() at all; it patches only the specific elements a status change
+// can affect (the tapped row's toggle buttons and fail-note, its station's
+// completion pill, the next station's lock state, the phase progress bar,
+// the footer CTA) and leaves every other station, the header, and
+// everything else in the DOM completely untouched. Since nothing unrelated
+// to the tap is destroyed anymore, there's nothing left for a mobile
+// browser's focus-loss or transition-interruption behavior to react to —
+// v17/v18 are still in place underneath this (numeric/text field blur and
+// screen navigation still go through the old full render() path
+// unchanged), but toggle taps, by far the most frequent interaction in the
+// app, no longer touch that path at all. See the extensive comments on
+// renderToggleControl/renderSubItemRow/renderStationCard and
+// updateAfterToggleTap itself in js/app.js — those two sides must be kept
+// in sync by hand whenever either one changes, which is the real ongoing
+// cost of this approach and is called out explicitly at both ends.
+// v22: step 3 of the flag -> fix -> acknowledge chain (steps 1/2 already
+// live in the driver app itself and in onetrip-mechanic, a separate repo).
+// Before Begin Inspection proceeds, the app now asks the shared Cloud Run
+// backend (js/drive.js's checkResolutionsForTruck) whether the selected
+// truck has any mechanic-certified fix the driver hasn't acknowledged yet
+// — the ONE place this app reads anything back from Drive, rather than
+// only uploading. If so, a new screen (renderResolutionAckScreen) shows
+// every one of them together (never one at a time), and a single Continue
+// button records the acknowledgment (acknowledgeResolutions) before
+// proceeding into Phase 1. Both the check and the acknowledgment fail
+// OPEN: any error — network, timeout, backend failure — lets the driver
+// proceed into the checklist exactly as before, on purpose, since nothing
+// gets marked acknowledged unless the write actually succeeds, so a
+// genuine unacknowledged item is never silently lost, only re-surfaced
+// next time. Editing truck/driver info mid-walk does NOT re-trigger this
+// check — only a genuine fresh start from Setup does.
+// v23: inspection-data.json now records, per photo station, when the photo
+// was taken (photoCapturedAt) and a 64-bit perceptual hash of it
+// (photoDHash) — js/photoStore.js, js/state.js, js/drive.js changed. Both
+// fields are additive; onetrip-admin and onetrip-mechanic ignore them.
+const CACHE_NAME = 'onetrip-shell-v23';
+const SHELL_FILES = [
+  './',
+  './index.html',
+  './manifest.json',
+  './css/tokens.css',
+  './css/style.css',
+  './js/auth.js',
+  './js/data.js',
+  './js/baselineReference.js',
+  './js/photoStore.js',
+  './js/state.js',
+  './js/drive.js',
+  './js/app.js',
+  './icons/icon.svg',
+];
+
+// Deliberately not cache.addAll(SHELL_FILES) — that uses a plain fetch
+// per file, which an edge cache that hasn't purged yet after a deploy can
+// still satisfy with stale content (this bit v6 through v8, each of which
+// looked "fine" moments later purely by luck of propagation timing).
+// cache: 'reload' forces every one of these requests past any HTTP
+// caching layer, all the way to the origin.
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) =>
+      Promise.all(SHELL_FILES.map((file) => fetch(file, { cache: 'reload' }).then((res) => cache.put(file, res))))
+    )
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (response.ok && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => cached);
+    })
+  );
+});

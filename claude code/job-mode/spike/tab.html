@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spike - full tab</title>
+  <link rel="stylesheet" href="spike.css">
+</head>
+<body data-surface="full tab">
+  <main>
+    <h1>Folder test: full tab</h1>
+    <p class="muted">This page shares the saved folder and the log with the side panel.</p>
+    <div id="env" class="mono"></div>
+    <div id="status" class="status"></div>
+    <div class="buttons">
+      <button id="pick">Choose test folder</button>
+      <button id="reconnect">Reconnect folder</button>
+      <button id="read">Read vault.md</button>
+      <button id="write">Write test.txt</button>
+      <button id="copy">Copy report</button>
+      <button id="clear" class="quiet">Clear log</button>
+    </div>
+    <h2>Log</h2>
+    <ol id="log" class="mono"></ol>
+  </main>
+  <script type="module" src="spike.js"></script>
+</body>
+</html>

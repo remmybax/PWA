@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Job Mode",
+  "version": "0.1.0",
+  "description": "Dan's job-search command center. Reads and writes the Career-Vault folder.",
+  "permissions": ["sidePanel", "activeTab", "scripting", "storage"],
+  "action": { "default_title": "Job Mode" },
+  "side_panel": { "default_path": "panel.html" },
+  "background": { "service_worker": "background.js" }
+}

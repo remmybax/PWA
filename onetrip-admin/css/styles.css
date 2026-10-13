@@ -1,0 +1,594 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.app-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  max-width: 480px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Sign-in / loading / error screens — centered, full height */
+.signin-screen,
+.loading-screen,
+.error-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 100vh;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.btn-primary {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--accent-on);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.btn-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+}
+
+.btn-text:hover {
+  color: var(--text-primary);
+}
+
+.error-text {
+  color: var(--status-defect-text);
+  font-size: 15px;
+  max-width: 480px;
+}
+
+/* Truck List screen */
+.truck-list-screen {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.back-link {
+  padding: 0;
+}
+
+.truck-list-columns {
+  display: none;
+}
+
+.truck-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.truck-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  text-align: left;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.truck-row:hover {
+  border-color: var(--border-strong);
+}
+
+.truck-row-number {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.truck-row-date,
+.truck-row-driver {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.status-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  justify-self: end;
+}
+
+.status-clean {
+  background: var(--status-clean-bg);
+  color: var(--status-clean-text);
+}
+
+.status-defect {
+  background: var(--status-defect-bg);
+  color: var(--status-defect-text);
+}
+
+.empty-state {
+  color: var(--text-secondary);
+}
+
+/* Inspection History screen — same row/card pattern as the Truck List, one
+   more column (Certified timestamp) since this list is scoped to one truck
+   and doesn't need to repeat the truck number on every row. */
+.history-columns {
+  display: none;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr 0.8fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  text-align: left;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.history-row:hover {
+  border-color: var(--border-strong);
+}
+
+.history-row-date {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.history-row-driver,
+.history-row-certified,
+.history-row-checked {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Desktop/tablet: show column headers above the list, since that's the
+   primary case for this app (unlike the driver app, which is mobile-first). */
+@media (min-width: 720px) {
+  .truck-list-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: var(--space-3);
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-2);
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (min-width: 720px) {
+  .history-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr 0.8fr auto;
+    gap: var(--space-3);
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-2);
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* Phone: stack each row's fields two-by-two instead of a cramped 4-col grid */
+@media (max-width: 719px) {
+  .truck-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "number status"
+      "date driver";
+  }
+  .truck-row-number {
+    grid-area: number;
+  }
+  .status-badge {
+    grid-area: status;
+  }
+  .truck-row-date {
+    grid-area: date;
+  }
+  .truck-row-driver {
+    grid-area: driver;
+    text-align: right;
+  }
+
+  .history-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "date status"
+      "driver checked"
+      "certified certified";
+  }
+  .history-row-date {
+    grid-area: date;
+  }
+  .history-row-driver {
+    grid-area: driver;
+  }
+  .history-row-checked {
+    grid-area: checked;
+    text-align: right;
+  }
+  .history-row-certified {
+    grid-area: certified;
+    font-size: 12px;
+  }
+}
+
+/* Inspection Detail screen */
+
+.detail-stats-row {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: var(--space-4) 0;
+}
+
+.detail-stat {
+  flex: 1;
+  background: var(--bg-surface);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.detail-stat-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.detail-stat-value-defect {
+  color: var(--status-defect-text);
+}
+
+.detail-stat-label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: var(--space-1);
+}
+
+.detail-clean-banner {
+  color: var(--status-clean-text);
+  background: var(--status-clean-bg);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  font-weight: 600;
+  margin: var(--space-4) 0;
+}
+
+/* Failed-items summary — same information as inspection-summary.txt's own
+   defect list, surfaced at the top of the page instead of at the bottom of
+   a 20+ station scroll. */
+.fail-summary {
+  background: var(--status-defect-bg);
+  border: 1px solid var(--status-defect-text);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+/* Once every flagged item in this inspection has a resolution, the whole
+   box drops the urgent red framing for the calmer clean/resolved tone —
+   there's no longer an active problem here, even though the history below
+   still shows what was originally flagged (see onetrip-mechanic's
+   resolution write-back and PROGRESS.md for why this app needs to know
+   about it at all). A still-open mix keeps the red framing; only
+   .fail-summary-row-resolved below distinguishes the individual resolved
+   rows within it. */
+.fail-summary-all-resolved {
+  background: var(--status-clean-bg);
+  border-color: var(--status-clean-text);
+}
+
+.fail-summary-title {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  color: var(--status-defect-text);
+  margin: 0 0 var(--space-3);
+}
+
+.fail-summary-all-resolved .fail-summary-title {
+  color: var(--status-clean-text);
+}
+
+.fail-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fail-summary-row {
+  background: var(--bg-surface);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* A resolved row within an otherwise still-open fail-summary list (or
+   within an all-resolved one) — muted/green left border instead of the
+   plain surface background, so a resolved item doesn't read as identical
+   to a still-open one even while sitting in the same list. */
+.fail-summary-row-resolved {
+  background: var(--bg-surface-raised);
+  border-left: 3px solid var(--status-clean-text);
+}
+
+.fail-summary-station {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.fail-summary-label {
+  display: block;
+  font-size: 14px;
+}
+
+/* Shared by both the top-of-page fail-summary rows and the full per-station
+   breakdown below — a mechanic's certification details, wherever a
+   resolved item is shown. */
+.resolution-note {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.resolution-note-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.zone-section {
+  margin-top: var(--space-5);
+}
+
+.zone-heading {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-3);
+}
+
+.station-detail-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.station-detail-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: var(--space-3);
+}
+
+.station-detail-subitems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.subitem-detail-row {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--bg-surface-raised);
+}
+
+/* The label+badge line — was the whole of .subitem-detail-row before a
+   resolved item needed a second line (.resolution-note) below it; pulled
+   into its own class so a plain pass/fail/n-a row (no note) still renders
+   as a single line exactly as before. */
+.subitem-detail-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.subitem-detail-label {
+  font-size: 14px;
+}
+
+/* Deliberately more than just a colored badge: a fail needs to read at a
+   glance while scanning past a whole station's worth of rows, not just on
+   close inspection of one small pill. */
+.subitem-detail-fail {
+  background: var(--status-defect-bg);
+  border-left: 3px solid var(--status-defect-text);
+}
+
+/* A fail that's since been certified fixed (see onetrip-mechanic) — muted
+   green instead of urgent red, since this isn't an active problem anymore,
+   but still visually distinct from a plain, never-failed pass/n-a row. */
+.subitem-detail-resolved {
+  background: var(--status-clean-bg);
+  border-left: 3px solid var(--status-clean-text);
+}
+
+.status-na {
+  background: var(--bg-surface-raised);
+  color: var(--text-muted);
+}
+
+.station-photo-wrap {
+  margin-bottom: var(--space-3);
+}
+
+.station-photo {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+}
+
+.station-photo-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Inspection Detail screen's action-button row (View Raw Summary, Compare
+   to Baseline) */
+.detail-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+/* Baseline Comparison screen — one baseline photo per zone (never per
+   station; see fetchBaselineManifest's own comment in data.js) next to
+   that zone's own station photos, stacked. Actual photo sizing/failure
+   styling reuses .station-photo / .station-photo-unavailable directly
+   (see renderBaselineZoneSection in app.js) rather than duplicating it. */
+.baseline-zone-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.baseline-photo-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+
+.inspection-photo-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Desktop/tablet: baseline and this inspection's photos sit side by side,
+   same breakpoint the rest of this app already uses for wider layouts. */
+@media (min-width: 720px) {
+  .baseline-zone-grid {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .baseline-photo-col {
+    flex: 1;
+    position: sticky;
+    top: var(--space-3);
+  }
+
+  .inspection-photo-col {
+    flex: 1;
+  }
+}

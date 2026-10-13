@@ -1,0 +1,130 @@
+<title>OneTrip Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column of three app sections; phone screens in a wrapping
+     grid, desktop screens full-width, each with a short caption. */
+  :root {
+    --bg: #f3f2ee;
+    --surface: #ffffff;
+    --ink: #161616;
+    --muted: #66645e;
+    --line: #dddbd4;
+    --gold: #8a6a2a;
+    --flag: #a33a2c;
+    --font-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161614; --surface: #201f1c; --ink: #eceae4; --muted: #a29f96; --line: #34322d; --gold: #c9a35a; --flag: #e07766;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161614; --surface: #201f1c; --ink: #eceae4; --muted: #a29f96; --line: #34322d; --gold: #c9a35a; --flag: #e07766;
+    color-scheme: dark;
+  }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: grid; gap: 56px; }
+  header { display: grid; gap: 10px; max-width: 70ch; }
+  h1, h2 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.1; }
+  h2 { font-size: 26px; }
+  p { margin: 0; }
+  .lede { color: var(--muted); font-size: 16px; }
+  .meta { font-size: 13px; color: var(--muted); }
+  section { display: grid; gap: 20px; }
+  .section-head { display: grid; gap: 6px; border-top: 2px solid var(--ink); padding-top: 16px; max-width: 75ch; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); }
+  .section-head p { color: var(--muted); }
+  .phones { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px 20px; }
+  .desks { display: grid; gap: 32px; }
+  figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); }
+  figcaption { display: grid; gap: 3px; font-size: 14px; min-width: 0; }
+  figcaption b { font-weight: 600; }
+  figcaption span { color: var(--muted); }
+  .bug { color: var(--flag); font-weight: 500; }
+  .notes { background: var(--surface); border: 1px solid var(--line); border-radius: 2px; padding: 20px 22px; display: grid; gap: 10px; max-width: 80ch; }
+  .notes ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  a { color: var(--gold); }
+  a:focus-visible, img:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">As built, 12 October 2026</span>
+    <h1>OneTrip screens</h1>
+    <p class="lede">Real screenshots of the three apps as they're built today: the driver app on a phone, the admin dashboard and the mechanic portal at desk size. Every screen is the app's own code, filled with fake test data (trucks TEST001 to TEST003). The photos are the real baseline shots of truck 826016.</p>
+    <p class="meta">The driver and admin screens include two changes still waiting to be pushed: photo time and fingerprint recording (driver) and the loading-text, truck-number and error sign-out polish (admin).</p>
+  </header>
+
+  <section aria-labelledby="driver">
+    <div class="section-head">
+      <span class="eyebrow">For drivers · phone</span>
+      <h2 id="driver">Driver app</h2>
+      <p>The walk-around itself. Stations unlock in walking order, photos come only from the live camera, and once certified the record locks and uploads to the company Drive.</p>
+    </div>
+    <div class="phones">
+      <figure><img src="driver-gate.png" alt="Access code screen" loading="lazy"><figcaption><b>1. Access code</b><span>One shared code. Asked once per device.</span></figcaption></figure>
+      <figure><img src="driver-setup.png" alt="Setup screen with truck dropdown" loading="lazy"><figcaption><b>2. Setup</b><span>Truck from a fixed list, driver name, date.</span></figcaption></figure>
+      <figure><img src="driver-ack.png" alt="Repairs since your last inspection screen" loading="lazy"><figcaption><b>3. Repairs since last inspection</b><span>Shown before Phase 1 when a mechanic fixed something. The driver confirms they've seen it.</span></figcaption></figure>
+      <figure><img src="driver-phase1.png" alt="Phase 1 checklist with a failed item" loading="lazy"><figcaption><b>4. Phase 1, Engine Off</b><span>Pass, Fail or N/A per item. A Fail is flagged and the station photo documents it.</span></figcaption></figure>
+      <figure><img src="driver-camera.png" alt="Live camera with baseline overlay" loading="lazy"><figcaption><b>5. Live camera</b><span>No gallery picker. The baseline photo shows faintly over the feed for framing. <span class="bug">"Flash unavailable" overflows its button at phone width.</span></span></figcaption></figure>
+      <figure><img src="driver-transition.png" alt="Engine off phase complete instructions" loading="lazy"><figcaption><b>6. Between phases</b><span>Close hood, start engine, lights on, walk the exterior.</span></figcaption></figure>
+      <figure><img src="driver-phase3.png" alt="Air brake readings with an automatic fail" loading="lazy"><figcaption><b>7. Phase 3, air brakes</b><span>Typed readings pass or fail on their own against the limits: 52 sec is over the 45 sec maximum.</span></figcaption></figure>
+      <figure><img src="driver-summary.png" alt="Inspection summary with two flagged items" loading="lazy"><figcaption><b>8. Summary</b><span>Totals and every flagged item, then Certify.</span></figcaption></figure>
+      <figure><img src="driver-complete.png" alt="Inspection complete, uploaded to Drive" loading="lazy"><figcaption><b>9. Complete</b><span>Locked and uploaded. Review is read-only from here.</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="admin">
+    <div class="section-head">
+      <span class="eyebrow">For Kevin · desktop</span>
+      <h2 id="admin">Admin dashboard</h2>
+      <p>Read-only review of every inspection in Drive, signed in with a Google account that has view access.</p>
+    </div>
+    <div class="desks">
+      <figure><img src="admin-trucks.png" alt="Truck list with defect and clean badges" loading="lazy"><figcaption><b>Truck list</b><span>Latest inspection per truck. Trucks with open defects sort first.</span></figcaption></figure>
+      <figure><img src="admin-history.png" alt="Inspection history for one truck" loading="lazy"><figcaption><b>Inspection history</b><span>Every inspection for one truck, newest first.</span></figcaption></figure>
+      <figure><img src="admin-detail.png" alt="Inspection detail with flagged items" loading="lazy"><figcaption><b>Inspection detail</b><span>Flagged items on top. The air line shows as resolved with the mechanic's note; the brake reading is still open.</span></figcaption></figure>
+      <figure><img src="admin-detailStations.png" alt="Station breakdown with photos" loading="lazy"><figcaption><b>Station breakdown</b><span>Each station's photo and every item's result.</span></figcaption></figure>
+      <figure><img src="admin-baseline.png" alt="Baseline photos beside this inspection's photos" loading="lazy"><figcaption><b>Baseline comparison</b><span>The truck's reference photo for each zone beside this inspection's photos.</span></figcaption></figure>
+    </div>
+    <div class="phones">
+      <figure><img src="admin-signin.png" alt="Admin sign-in screen" loading="lazy"><figcaption><b>Sign in</b><span>Google sign-in.</span></figcaption></figure>
+      <figure><img src="admin-noaccess.png" alt="No access screen" loading="lazy"><figcaption><b>No access</b><span>For an account without Drive permission, with a way to switch accounts.</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="mechanic">
+    <div class="section-head">
+      <span class="eyebrow">For Emmett · desktop or phone</span>
+      <h2 id="mechanic">Mechanic portal</h2>
+      <p>Open defects across all trucks. The mechanic signs off a repair, and the next driver of that truck sees it on screen 3 of the driver app.</p>
+    </div>
+    <div class="desks">
+      <figure><img src="mechanic-defects.png" alt="Open defects list" loading="lazy"><figcaption><b>Open defects</b><span>Oldest first, with the driver's photo and days open. Severity sorting waits on the out-of-service tagging decision.</span></figcaption></figure>
+      <figure><img src="mechanic-defectDetail.png" alt="Single defect with certify form" loading="lazy"><figcaption><b>Defect detail</b><span>The driver's full photo, who flagged it and when.</span></figcaption></figure>
+      <figure><img src="mechanic-defectDetailForm.png" alt="Certify repair form with proof photo" loading="lazy"><figcaption><b>Certify repair</b><span>Name, what was done, optional proof photo.</span></figcaption></figure>
+      <figure><img src="mechanic-certified.png" alt="Open defects after certifying one" loading="lazy"><figcaption><b>After certifying</b><span>Confirmation banner. The item leaves the open list.</span></figcaption></figure>
+      <figure><img src="mechanic-history.png" alt="Resolved history" loading="lazy"><figcaption><b>Resolved history</b><span>Who fixed what, and when. "No defect found" is recorded as a resolution with an explanation.</span></figcaption></figure>
+    </div>
+    <div class="phones">
+      <figure><img src="mechanic-defects-phone.png" alt="Open defects on a phone" loading="lazy"><figcaption><b>Open defects, phone</b><span>Same list at phone width.</span></figcaption></figure>
+      <figure><img src="mechanic-defectDetail-phone.png" alt="Defect detail on a phone" loading="lazy"><figcaption><b>Defect detail, phone</b><span>Same screen at phone width.</span></figcaption></figure>
+      <figure><img src="mechanic-signin.png" alt="Mechanic sign-in screen" loading="lazy"><figcaption><b>Sign in</b><span>Google sign-in.</span></figcaption></figure>
+    </div>
+  </section>
+
+  <aside class="notes" aria-label="Small issues spotted">
+    <h2>Small issues spotted while capturing</h2>
+    <ul>
+      <li><span class="bug">Driver camera:</span> "Flash unavailable" doesn't fit its button on a 390px-wide phone. iPhones always show this label.</li>
+      <li>Driver app values read "52sec" and "45sec" with no space, while the uploaded summary file says "52 sec".</li>
+      <li>On the between-phases screen, the Back and Confirm buttons touch with no gap.</li>
+    </ul>
+  </aside>
+</div>

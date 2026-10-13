@@ -1,0 +1,1065 @@
+/* OneTrip — mobile-first, high contrast, large tap targets for outdoor/one-
+   handed use. Every color/radius/font here is a var() from tokens.css —
+   see that file before touching any value in this one. */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Persistent top bar, every screen. Deliberately the only branding shown
+   anywhere in the app — no parent-company name or logo, ever. */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 16px 16px 0;
+}
+
+/* Icon + wordmark as a single lockup, top-left of every screen. */
+.app-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-header-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  background: var(--ink);
+  color: var(--ink-on);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-header-icon svg {
+  width: 15px;
+  height: 17px;
+}
+
+.app-header-wordmark {
+  font-family: var(--font-heading);
+  font-variant: small-caps;
+  color: var(--ink);
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+}
+
+.app-header-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: 13px; /* the app-wide meta-text floor */
+  line-height: 1.5;
+}
+
+.screen {
+  padding: 20px 16px 96px;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Screen-to-screen navigation (Setup -> Phase 1 -> ... -> Complete) slides
+   in from the right — never a hard cut, never a fade. Only applied when
+   actually landing on a new screen (see render() in app.js); a same-screen
+   re-render (tapping Pass on item 14 of 27) never re-triggers this. */
+.screen-enter {
+  animation: screen-slide-in 320ms ease-out;
+}
+
+@keyframes screen-slide-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-enter {
+    animation: none;
+  }
+}
+
+/* Typography */
+
+.app-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 2.1rem;
+  margin: 24px 0 0;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+
+.phase-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: -0.2px;
+  margin: 0 0 12px;
+  color: var(--text-primary);
+}
+
+.zone-heading {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 28px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Buttons */
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  min-height: var(--tap-min);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 200ms ease, filter 200ms ease, background 200ms ease;
+}
+
+/* Consistent press feedback on every button, everywhere — not just the
+   primary capture button. Pure CSS (:active), no JS required. */
+.btn:active {
+  transform: scale(0.98);
+  filter: brightness(0.92);
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.btn-large {
+  font-size: 1.05rem;
+  padding: 18px 20px;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--ink-on);
+}
+
+.btn-primary:disabled {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.btn-primary:disabled:active {
+  transform: none;
+  filter: none;
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  margin-top: 16px;
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  margin-top: 12px;
+}
+
+/* Setup screen */
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 28px;
+}
+
+.field-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 16px 0 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.text-input {
+  font-family: var(--font-body);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  min-height: var(--tap-min);
+  width: 100%;
+}
+
+.text-input:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+/* Phase header / progress */
+
+.phase-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-base);
+  padding: 10px 0 8px;
+  z-index: 5;
+}
+
+.phase-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+/* Back chevron sits inline with the phase title (see renderPhaseHeader in
+   app.js) rather than in its own row — the title stays the dominant visual
+   element, the button is just small and to its left. */
+.phase-title-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.phase-back-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Tap target still meets --tap-min (glove-and-sunlight environment, every
+     interactive element) even though the chevron drawn inside it is small
+     and visually unobtrusive — the two aren't the same measurement. */
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin-left: -18px; /* offsets the tap target's own width so the icon still reads as flush against the screen's left edge, without shrinking the hit area below --tap-min */
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.phase-back-btn:active {
+  color: var(--text-primary);
+}
+
+.phase-back-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Scoped to .phase-header specifically — .phase-title is also used bare on
+   the Transition and Summary screens (see app.js), which should keep their
+   own current size; only the checklist phase header gets more compact. */
+.phase-header .phase-title {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.phase-nav-link {
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-min); /* glove-and-sunlight environment — every interactive element, not just buttons */
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.phase-nav-link:active {
+  transform: scale(0.98);
+  filter: brightness(0.85);
+}
+
+.phase-edit-info-link {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.progress-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.progress-label-row span {
+  font-size: 13px; /* the app-wide meta-text floor */
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: var(--radius);
+  height: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background: var(--accent);
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+/* Station cards */
+
+.station-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.station-card.station-complete {
+  border-color: var(--border-strong);
+}
+
+.station-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.station-id {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.station-status-pill {
+  font-size: 13px; /* the app-wide meta-text floor */
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.pill-complete {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.pill-incomplete {
+  color: var(--text-secondary);
+}
+
+.pill-locked {
+  color: var(--text-muted);
+}
+
+.station-card.station-locked {
+  opacity: 0.55;
+}
+
+.station-locked-note {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.station-label {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.3rem;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+  margin: 8px 0 14px;
+  line-height: 1.55;
+}
+
+/* Photo control */
+
+.photo-control {
+  margin-bottom: 16px;
+}
+
+.photo-thumb {
+  width: 100%;
+  min-height: 80px;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface); /* fills the gap while the photo loads from IndexedDB */
+}
+
+.photo-slot-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+}
+
+.photo-slot-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+}
+
+/* Sub-items */
+
+.subitem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.subitem-row {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.subitem-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.subitem-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.subitem-label {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.checktype-badge {
+  flex-shrink: 0;
+  font-size: 13px; /* the app-wide meta-text floor — nothing renders smaller than this */
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 3px 7px;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.toggle-btn {
+  font-family: var(--font-body);
+  min-height: var(--tap-min);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  touch-action: manipulation;
+  /* Deliberately no transition here (unlike .btn elsewhere) — every tap on
+     a toggle button causes render() to tear this exact element down and
+     replace it about one animation frame later (see render()'s comment in
+     js/app.js), and a brand-new replacement element never transitions in
+     from a prior state anyway (nothing to ease FROM), so a transition here
+     could only ever animate the :active press/release below. A 200ms eased
+     release is ~12x longer than that one-frame gap, so it was always
+     guaranteed to get cut off mid-flight the moment the deferred re-render
+     fires — which is exactly what caused a small but very noticeable
+     "shake" on every single Pass/Fail/N/A tap once that deferred re-render
+     landed. Before that fix, the rebuild happened synchronously in the
+     same tick as the tap, so this transition never got a chance to
+     visibly start at all — the shake isn't new behavior, just a
+     previously-invisible one becoming visible once the bigger scroll-jump
+     bug stopped masking it. Keeping press/release instant removes the
+     only thing here a doomed-to-be-replaced element could show mid-
+     animation, rather than trying to out-race a rebuild timing that
+     varies by device. */
+}
+
+.toggle-btn:active {
+  transform: scale(0.98);
+  filter: brightness(0.92);
+}
+
+/* No per-item status carries its own color — Pass, Fail, and N/A are all
+   just neutral ink, inverted to show which is selected. The single gold
+   accent is reserved for the aggregate open-defect count elsewhere on
+   screen, never for an individual toggle. */
+.toggle-btn.toggle-pass.active,
+.toggle-btn.toggle-fail.active,
+.toggle-btn.toggle-na.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--ink-on);
+}
+
+.fail-flag-note {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 10px 0 0;
+}
+
+/* Read-only rendering (once an inspection is certified) */
+
+.readonly-status-pill {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.readonly-status-pill.readonly-fail {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.readonly-status-pill.readonly-na {
+  color: var(--text-muted);
+}
+
+.numeric-readonly-value {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-right: 12px;
+  color: var(--text-primary);
+}
+
+/* Numeric threshold sub-items */
+
+.numeric-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.numeric-input {
+  font-family: var(--font-body);
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  min-height: var(--tap-min);
+}
+
+.numeric-input:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.numeric-unit {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.numeric-input-row .toggle-btn {
+  flex: 0 0 auto;
+  min-width: 64px;
+}
+
+.auto-flag-badge {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.auto-flag-badge.auto-flag-fail {
+  color: var(--text-primary);
+}
+
+/* Live camera capture overlay */
+
+.camera-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-base);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-video-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+.camera-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--bg-base);
+}
+
+.camera-reference-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Flash/torch toggle — sits in the bottom control row between Cancel and
+   Capture, not floated over the live feed, so it can never collide with
+   the top-anchored .camera-error banner regardless of how long that
+   message runs. Disabled ("Flash unavailable") on any device/browser that
+   doesn't expose real torch control (see openCamera in app.js); never
+   hidden outright, so the absence of flash is visible feedback, not a
+   silent no-op. */
+.camera-flash-toggle {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  padding: 16px 10px;
+}
+
+.camera-flash-toggle:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.camera-flash-toggle:disabled:active {
+  transform: none;
+  filter: none;
+}
+
+.camera-flash-toggle.flash-on {
+  background: var(--ink);
+  color: var(--ink-on);
+  border-color: var(--ink);
+}
+
+/* Landscape (see openCamera/closeCamera's orientation unlock/relock): a
+   short viewport height means the fixed bottom control bar can otherwise
+   eat a large fraction of the screen. Tap targets stay at --tap-min
+   (that floor is non-negotiable, not just a portrait default) — only the
+   surrounding padding tightens up to give the live feed more room. */
+@media (orientation: landscape) {
+  .camera-controls {
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* A camera/permission failure is a system error, not an inspection defect
+   — stays neutral, same as every other non-defect warning in the app. */
+.camera-error {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  right: 16px;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  border: 1px solid var(--border-strong);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.camera-error:empty {
+  display: none;
+  border: none;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 12px;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  background: var(--bg-base);
+  border-top: 1px solid var(--border);
+}
+
+.camera-controls .btn {
+  flex: 1;
+  min-height: 64px;
+  font-size: 1.05rem;
+}
+
+.camera-shutter {
+  flex: 2;
+}
+
+/* Capture-confirmation ring + checkmark. Plays once, every time, on a
+   successful photo capture — same animation reused verbatim on the
+   completion screen. Both shapes are generic SVG geometry whose stroke
+   length is measured at runtime (see app.js) and driven purely by a
+   stroke-dashoffset transition, so timing stays exact regardless of the
+   shape drawn.
+
+   A solid badge rather than a dimmed full-screen scrim deliberately —
+   there's no token defined for a translucent overlay tint, and the token
+   list is closed, so this stays within it instead of inventing one. */
+.capture-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.capture-confirm-badge {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.confirm-ring-svg {
+  width: 96px;
+  height: 96px;
+  overflow: visible;
+}
+
+.confirm-ring-svg .confirm-ring,
+.confirm-ring-svg .confirm-check {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.confirm-ring-svg .confirm-ring {
+  stroke-width: 4;
+}
+
+.confirm-ring-svg .confirm-check {
+  stroke-width: 6;
+}
+
+/* Sticky footer */
+
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-base);
+  border-top: 1px solid var(--border);
+  padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sticky-footer .btn {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.sticky-footer .btn-secondary {
+  margin-top: 0; /* the flex gap on .sticky-footer already spaces stacked buttons */
+}
+
+/* Transition / done screens */
+
+.transition-instructions {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 24px;
+}
+
+.transition-logged {
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.done-copy {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+/* Summary screen */
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin: 20px 0;
+  border: 1px solid var(--border);
+}
+
+.stat-tile {
+  background: var(--bg-surface);
+  padding: 18px;
+  text-align: center;
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.9rem;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 13px; /* the app-wide meta-text floor */
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* The open-defects count is one of the three allowed uses of --accent. */
+.stat-tile.stat-fail .stat-value {
+  color: var(--accent);
+}
+
+.fail-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.fail-summary-row {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+
+.fail-summary-station {
+  display: block;
+  color: var(--text-primary);
+  font-size: 13px; /* the app-wide meta-text floor */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+.fail-summary-label {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.review-buttons {
+  margin-top: 24px;
+}
+
+/* Completion screen */
+
+.complete-mark-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 20px;
+}
+
+.complete-mark-wrap .confirm-ring-svg {
+  width: 56px;
+  height: 56px;
+}
+
+.complete-heading {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.5rem;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+.complete-subline {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+/* Drive upload status */
+
+.upload-status {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.upload-status-line {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.upload-status .btn {
+  margin-top: 12px;
+}
+
+.upload-uploading {
+  color: var(--text-secondary);
+  animation: upload-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes upload-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.reset-blocked {
+  margin-top: 12px;
+}
+
+/* Resolved-defect acknowledgment screen. Deliberately reuses the same
+   neutral surface/border treatment as .station-card and .upload-status
+   rather than any warning color — everything shown here has already been
+   fixed, so this is informational, not an alert. */
+
+.resolution-ack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.resolution-ack-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.resolution-ack-station {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 6px;
+}
+
+.resolution-ack-label {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.resolution-ack-meta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 6px;
+}
+
+.resolution-ack-notes {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
