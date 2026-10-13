@@ -314,7 +314,7 @@ a.tile:hover {
 }
 @media (max-width: 960px) {
   .two-col {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 }
 

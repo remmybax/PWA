@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { requirePageUser } from "@/server/session";
 import { ownDraftView, unitLine } from "@/server/view";
 import { discardDraft } from "@/server/inspections";
-import { progress, totals } from "@/lib/inspection";
+import { defects, judgeDay, progress, totals } from "@/lib/inspection";
+import { getStore } from "@/server/store";
 import { todayISO, usDateTime } from "@/lib/dates";
 import { AppBar } from "@/components/AppBar";
 import { ConfirmButton } from "@/components/ConfirmButton";
@@ -26,6 +27,9 @@ export default async function InspectionOverview({ params }: PageProps<"/inspect
   const p = progress(view.insp, today);
   const t = totals(p);
   const next = p.find((s) => s.done < s.total) ?? null;
+  // Open defects from this truck's last signed inspection, so the driver knows what to look at again.
+  const last = (await getStore().listInspections({ truckId: view.insp.truckId, certified: true }))[0];
+  const carried = last ? defects(last, judgeDay(last, today)).filter((d) => !d.resolved) : [];
 
   return (
     <main className="phone">
@@ -41,6 +45,23 @@ export default async function InspectionOverview({ params }: PageProps<"/inspect
             {view.insp.location ? ` · ${view.insp.location}` : ""}
           </p>
         </div>
+
+        {carried.length > 0 && (
+          <div className="note-warn">
+            <strong>
+              Still open from the last inspection ({usDateTime(last!.certifiedAt!)}):
+            </strong>
+            <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+              {carried.map((d) => (
+                <li key={d.item.id}>
+                  {d.item.label}
+                  {d.result.note ? ` — ${d.result.note}` : ""}
+                </li>
+              ))}
+            </ul>
+            <div style={{ marginTop: 6 }}>Check these again. If they&apos;re still bad, fail them here too.</div>
+          </div>
+        )}
 
         <div className="box box-pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 600 }}>
