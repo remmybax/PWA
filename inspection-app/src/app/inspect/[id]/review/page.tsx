@@ -9,6 +9,7 @@ import { photoUrl } from "@/lib/client-urls";
 import { AppBar } from "@/components/AppBar";
 import { ChevronLeft, ChevronRight, WarnIcon } from "@/components/icons";
 import { ReviewForm } from "./ReviewForm";
+import { QueueNotice } from "@/components/QueueNotice";
 
 export const metadata = { title: "Review and sign" };
 
@@ -48,6 +49,8 @@ export default async function Review({ params }: PageProps<"/inspect/[id]/review
           <h1 className="heading" style={{ fontSize: 28 }}>Review and sign</h1>
           <p className="lead">{unitLine(view)}</p>
         </div>
+
+        <QueueNotice inspectionId={id} />
 
         <div className="tiles">
           <div className="tile">

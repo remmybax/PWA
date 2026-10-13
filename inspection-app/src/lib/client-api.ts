@@ -63,14 +63,15 @@ export type SaveOutcome = { saved: true; result: ItemResult } | { saved: false; 
 
 export async function saveItem(inspectionId: string, itemId: string, result: ItemResult): Promise<SaveOutcome> {
   const key = `${inspectionId}|${itemId}`;
+  // This answer is newer than anything queued for the item, so the queued one must never be sent
+  // after it. Drop it now; if this send fails, this answer is queued instead.
+  const before = readOutbox();
+  if (before[key]) {
+    delete before[key];
+    writeOutbox(before);
+  }
   try {
-    const saved = await put(inspectionId, itemId, result);
-    const o = readOutbox();
-    if (o[key]) {
-      delete o[key];
-      writeOutbox(o);
-    }
-    return { saved: true, result: saved };
+    return { saved: true, result: await put(inspectionId, itemId, result) };
   } catch (e) {
     if (e instanceof ApiError) return { saved: false, queued: false, error: e.message };
     const o = readOutbox();
@@ -82,16 +83,20 @@ export async function saveItem(inspectionId: string, itemId: string, result: Ite
 
 /** Sends whatever is waiting. Returns how many are still waiting. */
 export async function flushOutbox(): Promise<number> {
-  const o = readOutbox();
-  for (const [key, x] of Object.entries(o)) {
+  for (const key of Object.keys(readOutbox())) {
+    // Read again each time: a newer answer may have replaced or cleared this one meanwhile.
+    const x = readOutbox()[key];
+    if (!x) continue;
     try {
       await put(x.inspectionId, x.itemId, x.result);
-      delete o[key];
     } catch (e) {
-      if (e instanceof ApiError) delete o[key]; // the server refused it; retrying won't help
-      else break;
+      if (!(e instanceof ApiError)) break; // still no signal
+      // The server refused it; retrying won't help, so drop it.
     }
+    const o = readOutbox();
+    if (o[key] === undefined || JSON.stringify(o[key]) !== JSON.stringify(x)) continue; // replaced meanwhile
+    delete o[key];
+    writeOutbox(o);
   }
-  writeOutbox(o);
-  return Object.keys(o).length;
+  return Object.keys(readOutbox()).length;
 }

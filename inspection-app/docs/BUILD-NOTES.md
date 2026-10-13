@@ -13,7 +13,7 @@ What was built, what was decided along the way (all easy to change), and what's 
 | Fails | Need a note and a photo. The review screen lists them. "In service" can't be chosen while anything failed. |
 | Locking | Once signed, nothing changes, except a manager or the shop marking a failed item repaired (with note, optional photo). The original failure is never hidden. |
 | Carry-over | Starting a truck shows the open defects from its last inspection. |
-| Saving | Every answer saves as it's tapped. With no signal, answers wait on the phone and send when signal returns. |
+| Saving | Every answer saves as it's tapped. With no signal, answers and photos wait on the phone and send by themselves when signal returns (a banner says how many are waiting; the review screen warns too). |
 | QR | Each signed inspection gets a long random link. Anyone with it can read that one report (with photos), nothing else. |
 | Sticker | Picture sized for the Nelko PM220 at 203 dpi: 50 × 30 (default), 40 × 30, 50 × 50 mm. Share straight to the Nelko app on a phone, or save it. |
 | Paper report | One US Letter page (two if long): unit info, status boxes, defects, paperwork dates, supplies, walk-around, comments, signature and "reviewed by" line, sticker box top right. Option to print the QR straight onto the page. |
@@ -42,8 +42,9 @@ What was built, what was decided along the way (all easy to change), and what's 
 
 - **Not online yet.** Runs on a PC like the Ticket Log. QR stickers need `PUBLIC_BASE_URL` set to
   the real address first, or they'll point at the PC.
-- **Photos with no signal.** Answers queue on the phone; photos don't. A photo taken with no signal
-  shows "didn't upload, take it again". Queuing photos on the phone is the biggest gap for field use.
+- **No-signal photos attach when their section is open.** A photo taken with no signal uploads by
+  itself later, and is attached to its item the next time that section is on screen. Signing is
+  blocked until it is, so nothing is lost, but the driver may need to open the section again.
 - **No offline app shell** (service worker), so the app must be opened with signal at least once
   per session. It can still be added to the home screen.
 - **Supabase build not run against a real project.** The demo build is fully tested; the Supabase

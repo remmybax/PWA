@@ -6,6 +6,7 @@ import { sectionsFor } from "@/lib/checklist";
 import { itemProblem } from "@/lib/inspection";
 import type { ItemResult } from "@/lib/types";
 import { flushOutbox, outboxCount } from "@/lib/client-api";
+import { flushPhotos } from "@/lib/photo-queue";
 import { ArrowRight, ChevronLeft } from "@/components/icons";
 import { ItemCard } from "./ItemCard";
 import styles from "./section.module.css";
@@ -33,6 +34,7 @@ export function SectionScreen({
   const next = sections[index + 1];
   const [results, setResults] = useState(initial);
   const [waiting, setWaiting] = useState(0);
+  const [photosWaiting, setPhotosWaiting] = useState(0);
   const [online, setOnline] = useState(true);
 
   useEffect(() => {
@@ -40,12 +42,15 @@ export function SectionScreen({
     setOnline(navigator.onLine);
     const up = async () => {
       setOnline(true);
+      setPhotosWaiting(await flushPhotos());
       setWaiting(await flushOutbox());
     };
+    flushPhotos().then(setPhotosWaiting);
     const down = () => setOnline(false);
     window.addEventListener("online", up);
     window.addEventListener("offline", down);
     const t = setInterval(async () => {
+      setPhotosWaiting(await flushPhotos());
       if (outboxCount(inspectionId)) setWaiting(await flushOutbox());
     }, 15000);
     return () => {
@@ -78,9 +83,13 @@ export function SectionScreen({
         <div className="bar" aria-hidden="true">
           <span style={{ width: `${(done / section.items.length) * 100}%` }} />
         </div>
-        {(!online || waiting > 0) && (
+        {(!online || waiting > 0 || photosWaiting > 0) && (
           <div className={styles.offline} role="status">
-            {!online ? "No signal. Keep going: answers are kept on the phone." : `${waiting} answer${waiting === 1 ? "" : "s"} waiting to send…`}
+            {!online
+              ? "No signal. Keep going: answers and photos are kept on the phone."
+              : [waiting ? `${waiting} answer${waiting === 1 ? "" : "s"}` : "", photosWaiting ? `${photosWaiting} photo${photosWaiting === 1 ? "" : "s"}` : ""]
+                  .filter(Boolean)
+                  .join(" and ") + " waiting to send…"}
           </div>
         )}
       </div>

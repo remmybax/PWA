@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import type { ChecklistItem } from "@/lib/checklist";
 import { itemProblem, verdictOf } from "@/lib/inspection";
 import type { ItemResult, Verdict } from "@/lib/types";
-import { photoUrl, saveItem, uploadPhoto } from "@/lib/client-api";
+import { ApiError, photoUrl, saveItem, uploadPhoto } from "@/lib/client-api";
+import { enqueuePhoto, PHOTO_UPLOADED, queuedPhotos, removeQueued, type QueuedPhoto } from "@/lib/photo-queue";
 import { Camera, type Shot } from "@/components/Camera";
 import { Lightbox } from "@/components/Lightbox";
 import { CameraIcon, CheckIcon, CloseIcon, WarnIcon } from "@/components/icons";
@@ -35,12 +36,51 @@ export function ItemCard({
   const [camera, setCamera] = useState(false);
   const [uploading, setUploading] = useState(0);
   const [view, setView] = useState<number | null>(null);
+  const [waiting, setWaiting] = useState<{ id: string; url: string }[]>([]);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latest = useRef(r);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
   }, []);
+
+  // Photos taken with no signal: show them as waiting, and attach each one once it has uploaded.
+  useEffect(() => {
+    let alive = true;
+    const urls: string[] = [];
+    async function attach(p: QueuedPhoto) {
+      if (!p.ref || latest.current.photos.some((x) => x.key === p.ref!.key)) {
+        if (p.ref) await removeQueued(p.id);
+        return;
+      }
+      update({ photos: [...latest.current.photos, p.ref] });
+      await removeQueued(p.id);
+      setWaiting((w) => w.filter((x) => x.id !== p.id));
+    }
+    queuedPhotos(inspectionId, item.id).then((list) => {
+      if (!alive) return;
+      const notYet = list.filter((p) => !p.ref);
+      setWaiting(
+        notYet.map((p) => {
+          const url = URL.createObjectURL(p.blob);
+          urls.push(url);
+          return { id: p.id, url };
+        }),
+      );
+      list.filter((p) => p.ref).forEach(attach);
+    });
+    const onUploaded = (e: Event) => {
+      const p = (e as CustomEvent<QueuedPhoto>).detail;
+      if (p.inspectionId === inspectionId && p.itemId === item.id) attach(p);
+    };
+    window.addEventListener(PHOTO_UPLOADED, onUploaded);
+    return () => {
+      alive = false;
+      window.removeEventListener(PHOTO_UPLOADED, onUploaded);
+      urls.forEach((u) => URL.revokeObjectURL(u));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inspectionId, item.id]);
 
   async function send(next: ItemResult) {
     setSave({ state: "saving" });
@@ -67,10 +107,20 @@ export function ItemCard({
       const ref = await uploadPhoto(shot.blob);
       update({ photos: [...latest.current.photos, ref] });
     } catch (e) {
-      setSave({ state: "error", error: `Photo didn't upload: ${(e as Error).message}. Take it again when you have signal.` });
+      if (e instanceof ApiError) {
+        setSave({ state: "error", error: `Photo didn't upload: ${e.message}` });
+      } else {
+        // No signal: keep it on the phone; it uploads by itself later.
+        try {
+          const q = await enqueuePhoto(inspectionId, item.id, shot.blob);
+          setWaiting((w) => [...w, { id: q.id, url: URL.createObjectURL(q.blob) }]);
+          setSave({ state: "queued", error: "No signal. The photo is saved on the phone and uploads when signal is back." });
+        } catch {
+          setSave({ state: "error", error: "No signal, and the phone couldn't keep the photo. Take it again when you have signal." });
+        }
+      }
     } finally {
       setUploading((n) => n - 1);
-      URL.revokeObjectURL(shot.url);
     }
   }
 
@@ -207,6 +257,14 @@ export function ItemCard({
               >
                 <CloseIcon size={14} />
               </button>
+            </div>
+          ))}
+          {waiting.map((w) => (
+            <div key={w.id} className={styles.photo}>
+              <div className="thumb" style={{ cursor: "default" }}>
+                <img src={w.url} alt="" />
+                <span className="thumb-cap">Waiting for signal</span>
+              </div>
             </div>
           ))}
           {uploading > 0 && <div className={`${styles.photo} ${styles.uploading}`}>Uploading…</div>}
