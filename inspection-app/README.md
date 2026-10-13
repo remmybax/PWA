@@ -69,5 +69,5 @@ npm run build   # production build
 Changing the checklist is one file: `src/lib/checklist.ts`. The screens, report, paper report,
 dashboard and export all follow it.
 
-More: [docs/BUILD-NOTES.md](docs/BUILD-NOTES.md) (decisions and gaps),
+**[Screenshot tour](docs/TOUR.md)** · More: [docs/BUILD-NOTES.md](docs/BUILD-NOTES.md) (decisions and gaps),
 [docs/SUPABASE-SETUP.md](docs/SUPABASE-SETUP.md) (going from demo to real).
