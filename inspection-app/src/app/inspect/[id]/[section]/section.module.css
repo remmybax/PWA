@@ -1,0 +1,241 @@
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid var(--lines);
+}
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 4px;
+}
+.back {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+}
+.topText {
+  flex: 1;
+  min-width: 0;
+}
+.topTitle {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  line-height: 1.1;
+}
+.topSub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.count {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 12px 24px;
+}
+.intro {
+  margin: 0 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--lines);
+  border-left: 4px solid var(--lines);
+}
+.itemDone {
+  border-left-color: var(--ok);
+}
+.itemFail {
+  border-left-color: var(--orange-dark);
+}
+.itemHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.itemLabel {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+}
+.itemState {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ok);
+}
+.todo {
+  color: var(--orange-ink);
+}
+.help {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.valueRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.unit {
+  font-family: var(--font-mono);
+  color: var(--ink-2);
+}
+.naRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.small {
+  min-height: 40px;
+  font-size: 13px;
+  padding: 0 12px;
+}
+.naRow [aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.failBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--orange-tint);
+  border: 2px solid var(--orange-dark);
+}
+.failTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--orange-ink);
+}
+.failHelp {
+  font-size: 12px;
+  color: var(--orange-deep);
+}
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+}
+.photo {
+  position: relative;
+}
+.uploading {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--chip);
+  font-size: 12px;
+  color: var(--muted);
+}
+.remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: rgba(18, 22, 31, 0.8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.addPhoto {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px dashed var(--field-line);
+  background: var(--ground);
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  padding: 4px;
+}
+.addPhotoNeeded {
+  border: 2px solid var(--orange-dark);
+  background: var(--orange-tint);
+  color: var(--orange-ink);
+}
+.linkBtn {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  padding: 4px 0;
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.saveQueued {
+  font-size: 13px;
+  color: var(--navy);
+  background: var(--navy-tint);
+  padding: 8px 10px;
+}
+.saveError {
+  font-size: 13px;
+  color: var(--orange-deep);
+  background: var(--orange-tint);
+  padding: 8px 10px;
+  font-weight: 600;
+}
+.foot {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid var(--lines);
+}
+.offline {
+  padding: 8px 16px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}

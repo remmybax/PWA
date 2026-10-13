@@ -1,0 +1,57 @@
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mode {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--lines);
+  color: var(--navy);
+  text-decoration: none;
+}
+.mode:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+.modeMain {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.modeMain:hover {
+  background: #1a1478;
+  color: #fff;
+}
+.modeOff {
+  color: var(--muted);
+  background: var(--ground);
+  border-style: dashed;
+}
+.modeText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.modeTitle {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.modeSub {
+  font-size: 14px;
+  opacity: 0.85;
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

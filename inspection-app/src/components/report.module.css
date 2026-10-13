@@ -1,0 +1,209 @@
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--lines);
+  border-top: 4px solid var(--navy);
+}
+.headTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.kicker {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.unit {
+  margin: 2px 0 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 32px;
+  text-transform: uppercase;
+  color: var(--navy);
+  line-height: 1;
+}
+.trailer {
+  font-size: 22px;
+  color: var(--ink-2);
+}
+.status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.defects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.defect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--lines);
+  border-left: 4px solid var(--orange-dark);
+}
+.defectFixed {
+  border-left-color: var(--ok);
+}
+.defectHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.defectText {
+  flex: 1;
+  min-width: 0;
+}
+.defectLabel {
+  font-weight: 600;
+}
+.defectSub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.defectNote {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--orange-tint);
+  color: var(--orange-deep);
+  font-size: 14px;
+}
+.defectFixed .defectNote {
+  background: var(--ground);
+  color: var(--ink-2);
+}
+.resolution {
+  padding: 10px 12px;
+  background: #e3efe5;
+  color: #1e4a27;
+  font-size: 14px;
+}
+.supplies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  background: #fff;
+  border: 1px solid var(--lines);
+}
+.supply {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--lines-soft);
+  font-size: 14px;
+}
+.supplyMark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: var(--chip);
+  color: var(--ink-2);
+}
+.supplyMark[data-v="pass"] {
+  background: #e3efe5;
+  color: var(--ok);
+}
+.supplyMark[data-v="fail"] {
+  background: var(--orange-dark);
+  color: #fff;
+}
+.supplyLabel {
+  flex: 1;
+}
+.supplyVal {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.section {
+  background: #fff;
+  border: 1px solid var(--lines);
+}
+.section + .section {
+  border-top: 0;
+}
+.sectionHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  list-style: none;
+}
+.sectionHead::-webkit-details-marker {
+  display: none;
+}
+.sectionHead::before {
+  content: "+";
+  font-family: var(--font-mono);
+  margin-right: 8px;
+  color: var(--muted);
+}
+details[open] > .sectionHead::before {
+  content: "–";
+}
+.sectionHead > span:first-child {
+  flex: 1;
+}
+.items {
+  border-top: 1px solid var(--lines-soft);
+}
+.itemRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--lines-soft);
+  align-items: center;
+}
+.itemRow:first-child {
+  border-top: 0;
+}
+.itemMain {
+  min-width: 0;
+}
+.itemLabel {
+  font-size: 14px;
+}
+.itemNote {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--orange-ink);
+}
+.itemPhotos {
+  grid-column: 1 / -1;
+}
