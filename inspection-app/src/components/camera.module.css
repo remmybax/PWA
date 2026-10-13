@@ -1,0 +1,135 @@
+/* Dark camera screen, matching the Ticket Log's scan screen. */
+.cam {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: var(--camera-bg);
+  color: var(--ground);
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px 20px;
+}
+.title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.iconBtn {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: 1px solid #4a5263;
+  background: transparent;
+  color: var(--ground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.view {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0 12px;
+  background: var(--camera-panel);
+  overflow: hidden;
+}
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+video.media {
+  object-fit: cover;
+}
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--camera-muted);
+  font-size: 15px;
+}
+.corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 0 solid var(--orange);
+  pointer-events: none;
+}
+.tl { left: 16px; top: 16px; border-left-width: 4px; border-top-width: 4px; }
+.tr { right: 16px; top: 16px; border-right-width: 4px; border-top-width: 4px; }
+.bl { left: 16px; bottom: 16px; border-left-width: 4px; border-bottom-width: 4px; }
+.br { right: 16px; bottom: 16px; border-right-width: 4px; border-bottom-width: 4px; }
+.error {
+  margin: 8px 12px 0;
+  padding: 10px 12px;
+  background: var(--orange-tint);
+  color: var(--orange-deep);
+  font-weight: 600;
+  font-size: 14px;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px calc(24px + env(safe-area-inset-bottom));
+}
+.side {
+  width: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ground);
+  font-size: 11px;
+  cursor: pointer;
+}
+.side:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.side[aria-pressed="true"] {
+  color: var(--orange);
+}
+.shutter {
+  width: 80px;
+  height: 80px;
+  border: 4px solid var(--ground);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.shutter span {
+  display: block;
+  width: 60px;
+  height: 60px;
+  background: var(--orange);
+}
+.shutter:active span {
+  transform: scale(0.92);
+}
+.shutter:disabled span {
+  opacity: 0.5;
+}
