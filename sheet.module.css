@@ -1,0 +1,77 @@
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px 32px;
+  background: #fff;
+}
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(540px, 100%);
+}
+.logo {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+.line {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0 4px;
+  border-bottom: 1px solid var(--ink);
+  font-size: 14px;
+}
+.lineLabel {
+  width: 120px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.lineValue {
+  font-weight: 600;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.scroller {
+  overflow-x: auto;
+}
+.scroller :global(.sheet-head) {
+  background: #fff;
+  min-height: 46px;
+}
+.scroller :global(.sheet-row) {
+  height: 38px;
+}
+.totals {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.totals strong {
+  color: var(--ink);
+}
+@media (max-width: 640px) {
+  .page {
+    padding: 16px;
+  }
+}
+@media print {
+  .actions {
+    display: none;
+  }
+}

@@ -1,0 +1,336 @@
+:root {
+  --navy: #0d085c;
+  --navy-line: #3a3585;
+  --navy-tint: #e0dff1;
+  --navy-select: #e7e6f3;
+  --orange: #f05004; /* logo orange: non-text accents only */
+  --orange-dark: #c44104; /* orange buttons carrying white text */
+  --orange-tint: #fde6d6;
+  --orange-ink: #8a3303;
+  --orange-deep: #6b2800;
+  --orange-line: #f5bf9a;
+  --ground: #f2f3f5;
+  --ink: #161c2a;
+  --ink-2: #3a404c;
+  --muted: #565b66;
+  --lines: #d5d8de;
+  --lines-soft: #e8eaee;
+  --lines-row: #e1e4e9;
+  --field-line: #9aa0ac;
+  --chip: #e3e6eb;
+  --ok: #2f6b3a;
+  --camera-bg: #12161f;
+  --camera-panel: #1c2230;
+  --camera-muted: #b9beca;
+
+  --font-heading: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  color-scheme: light;
+}
+
+/* Sharp corners everywhere: no pills, no rounded bubbles. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--ground);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--navy);
+}
+a:hover {
+  color: var(--orange-dark);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--orange-dark);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  margin: 0;
+}
+
+.section-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+/* White header bar with a 4px navy bottom border. */
+.appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fff;
+  border-bottom: 4px solid var(--navy);
+  flex-shrink: 0;
+}
+.appbar img {
+  display: block;
+  height: 36px;
+  width: auto;
+}
+
+/* Buttons: min 44px touch targets. */
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--navy);
+  color: #fff;
+}
+.btn-primary:hover {
+  color: #fff;
+  background: #1a1478;
+}
+.btn-orange {
+  background: var(--orange-dark);
+  color: #fff;
+}
+.btn-orange:hover {
+  color: #fff;
+  background: #a93703;
+}
+.btn-outline {
+  border-color: var(--navy);
+  color: var(--navy);
+  background: #fff;
+}
+.btn-quiet {
+  border-color: var(--lines);
+  color: var(--ink);
+  font-weight: 500;
+}
+.btn-big {
+  min-height: 56px;
+  font-size: 17px;
+  width: 100%;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--chip);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-family: var(--font-body);
+}
+.status-ok {
+  background: #e9ebef;
+  color: var(--ink-2);
+}
+.status-confirmed {
+  background: var(--orange-tint);
+  color: var(--orange-ink);
+}
+.status-edited {
+  background: var(--navy-tint);
+  color: var(--navy);
+}
+
+.input {
+  height: 44px;
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--field-line);
+  background: #fff;
+  font-size: 16px; /* 16px stops iOS zooming on focus */
+}
+.input.mono {
+  font-family: var(--font-mono);
+}
+.input[aria-invalid="true"] {
+  border: 2px solid var(--orange-dark);
+}
+textarea.input {
+  height: auto;
+  padding: 10px 12px;
+  resize: none;
+}
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.field-error {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--orange-ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Phone screens: full height, capped width on desktop. */
+.phone {
+  min-height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+}
+@media (min-width: 521px) {
+  .phone {
+    border-left: 1px solid var(--lines);
+    border-right: 1px solid var(--lines);
+  }
+}
+
+/* The paper sheet grid (My log, full sheet). Column widths follow the designs. */
+.sheet {
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+  background: #fff;
+  min-width: 1188px;
+}
+.sheet-row {
+  display: grid;
+  grid-template-columns: var(--sheet-cols);
+  height: 40px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: #fff;
+}
+.sheet-row.is-new {
+  background: var(--orange-tint);
+}
+.sheet-row > div {
+  padding: 0 4px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sheet-row > div.comment {
+  justify-content: flex-start;
+  padding: 0 6px;
+  font-family: var(--font-body);
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 39px;
+}
+.sheet-head {
+  display: grid;
+  grid-template-columns: var(--sheet-cols);
+  background: var(--chip);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.2;
+}
+.sheet-head > div {
+  padding: 6px 2px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.sheet-empty {
+  padding: 24px 12px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Any value too long for its sheet column: smaller, then two lines, never cut off. */
+.fit-sm {
+  font-size: 11px !important;
+}
+.fit-xs {
+  font-size: 9.5px !important;
+  letter-spacing: -0.02em;
+}
+.fit-wrap {
+  display: flex !important;
+  align-items: center;
+  font-size: 9px !important;
+  line-height: 1.1 !important;
+  white-space: normal !important;
+  text-align: center;
+  overflow-wrap: anywhere;
+  letter-spacing: -0.02em;
+}
+.sheet-row > div.comment.fit-wrap {
+  text-align: left;
+}

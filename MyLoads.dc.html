@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My log</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#F2F3F5;color:#161C2A}
+a{color:#0D085C}a:hover{color:#C44104}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F2F3F5; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #161C2A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; background: #FFFFFF; border-bottom: 4px solid #0D085C">
+<img src="/_blob/e20dd83250042f8ee0943ff703171cf2" alt="Indeca Crude Xpress" style="width: 124px; height: 36px; display: block">
+<div style="display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 0; background: #E3E6EB; font-size: 13px; font-weight: 600; color: #3A404C">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+View only
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px">
+<div style="font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 28px; text-transform: uppercase; letter-spacing: 0.02em; color: #0D085C">My log</div>
+<div style="display: flex; flex-direction: column; gap: 0; border-top: 1px solid #161C2A">
+<div style="display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid #161C2A; font-size: 14px">
+<div style="width: 118px; color: #565B66">Employee Name</div>
+<div style="font-weight: 600">Dan VanWormer</div>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 2px 0; border-bottom: 1px solid #161C2A; font-size: 14px">
+<div style="width: 118px; color: #565B66">Week</div>
+<button type="button" aria-label="Previous week" style="width: 44px; height: 40px; border: 0; background: transparent; color: #0D085C; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+<div style="font-weight: 600">09/20 – 09/26</div>
+<button type="button" aria-label="Next week" style="width: 44px; height: 40px; border: 0; background: transparent; color: #0D085C; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 13px; color: #565B66">Loads this week</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 26px; font-weight: 500">{{count}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 13px; color: #565B66">Wait time (hrs)</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 26px; font-weight: 500">{{waitTotal}}</div>
+</div>
+</div>
+</div>
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 0 0 12px 16px">
+<div style="font-size: 13px; color: #565B66; padding-right: 16px">Swipe the sheet for more columns →</div>
+<div style="flex-grow: 1; overflow: auto; border-top: 1px solid #161C2A; border-left: 1px solid #161C2A; background: #FFFFFF">
+<div style="width: 1188px; display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 52px 64px 72px 44px 52px 40px 56px 76px 56px 76px 60px 60px 44px 76px 76px 56px 48px 180px; background: #E3E6EB; font-size: 11px; font-weight: 600; color: #161C2A; text-align: center; white-space: pre-line; line-height: 1.2">
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Date</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Lease #</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Ticket#</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Tank #</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Reject</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">G/M</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">T.Temp</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Top gauge
+or meter</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">B.Temp</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">B Gauge
+or meter</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Ob.Grav</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Ob.Temp</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">S&amp;W</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Seal On</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Seal Off</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Station #</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Wait
+Time</div>
+<div style="padding: 6px 2px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A">Comments</div>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+<div style="{{r.style}}">
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.date}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.lease}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.ticket}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.tank}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.reject}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.gm}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.ttemp}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.top}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.btemp}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.bottom}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.grav}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.obtemp}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.sw}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.sealOn}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.sealOff}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.station}}</div>
+<div style="padding: 0 4px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; justify-content: center">{{r.wait}}</div>
+<div style="padding: 0 6px; border-right: 1px solid #161C2A; border-bottom: 1px solid #161C2A; display: flex; align-items: center; font-family: 'IBM Plex Sans', system-ui, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.comments}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 13px; color: #565B66; padding-right: 16px; text-wrap: pretty">Highlighted row = just logged. Spot a mistake? Call dispatch — only dispatch can edit a logged load.</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px 16px 24px 16px; border-top: 1px solid #D5D8DE">
+<a href="DriverLog.dc.html" style="height: 52px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #0D085C; color: #0D085C; background: #FFFFFF; border-radius: 0; text-decoration: none; font-size: 15px; font-weight: 600">Full sheet</a>
+<a href="Main.dc.html" style="height: 52px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #0D085C; color: #FFFFFF; border-radius: 0; text-decoration: none; font-size: 15px; font-weight: 600">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+Scan next
+</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const week = [
+{ date: '09/22', lease: '40217', ticket: '1180211', tank: '1', reject: 'N', gm: 'G', ttemp: '71', top: "14' 2.5\"", btemp: '70', bottom: "4' 3.25\"", grav: '42.4', obtemp: '69', sw: '0.1', sealOn: '0048741', sealOff: '0048740', station: '12', wait: '0.25', comments: '' },
+{ date: '09/22', lease: '40388', ticket: '1180236', tank: '2', reject: 'N', gm: 'G', ttemp: '74', top: "13' 9\"", btemp: '73', bottom: "4' 1.75\"", grav: '41.2', obtemp: '72', sw: '0.2', sealOn: '0048743', sealOff: '0048742', station: '12', wait: '0', comments: '' },
+{ date: '09/22', lease: '40519', ticket: '1180260', tank: '1', reject: 'N', gm: 'G', ttemp: '77', top: "15' 1.25\"", btemp: '76', bottom: "4' 6.5\"", grav: '40.8', obtemp: '75', sw: '0.3', sealOn: '0048745', sealOff: '0048744', station: '7', wait: '1.5', comments: 'Waited on gauger' },
+{ date: '09/23', lease: '40217', ticket: '1180342', tank: '2', reject: 'N', gm: 'G', ttemp: '69', top: "14' 8.75\"", btemp: '68', bottom: "4' 2\"", grav: '42.2', obtemp: '68', sw: '0.1', sealOn: '0048747', sealOff: '0048746', station: '12', wait: '0', comments: '' },
+{ date: '09/23', lease: '40602', ticket: '1180371', tank: '1', reject: 'N', gm: 'M', ttemp: '—', top: '20418.6', btemp: '—', bottom: '20614.2', grav: '41.9', obtemp: '73', sw: '0.2', sealOn: '—', sealOff: '—', station: '7', wait: '0.5', comments: 'LACT meter' },
+{ date: '09/23', lease: '40388', ticket: '1180395', tank: '3', reject: 'N', gm: 'G', ttemp: '76', top: "13' 11.5\"", btemp: '75', bottom: "4' 0.75\"", grav: '41.5', obtemp: '75', sw: '0.2', sealOn: '0048751', sealOff: '0048750', station: '7', wait: '0', comments: '' },
+{ date: '09/24', lease: '40217', ticket: '1180471', tank: '1', reject: 'N', gm: 'G', ttemp: '68', top: "14' 6\"", btemp: '67', bottom: "4' 4.75\"", grav: '42.1', obtemp: '68', sw: '0.1', sealOn: '0048791', sealOff: '0048790', station: '12', wait: '0', comments: '' },
+{ date: '09/24', lease: '40731', ticket: '1180495', tank: '1', reject: 'N', gm: 'G', ttemp: '73', top: "13' 8.25\"", btemp: '72', bottom: "4' 2\"", grav: '41.4', obtemp: '73', sw: '0.2', sealOn: '0048797', sealOff: '0048796', station: '12', wait: '0', comments: '' },
+{ date: '09/24', lease: '40217', ticket: '1180533', tank: '2', reject: 'N', gm: 'G', ttemp: '75', top: "15' 0\"", btemp: '74', bottom: "4' 10.5\"", grav: '42.3', obtemp: '75', sw: '0.1', sealOn: '0048805', sealOff: '0048804', station: '7', wait: '0.75', comments: '' },
+{ date: '09/24', lease: '40844', ticket: '1180562', tank: '3', reject: 'N', gm: 'G', ttemp: '76', top: "14' 3.5\"", btemp: '75', bottom: "4' 1.25\"", grav: '41.8', obtemp: '76', sw: '0.2', sealOn: '0048813', sealOff: '0048812', station: '12', wait: '0', comments: 'B gauge confirmed by driver', isNew: true }
+];
+const base = "display: grid; grid-template-columns: 52px 64px 72px 44px 52px 40px 56px 76px 56px 76px 60px 60px 44px 76px 76px 56px 48px 180px; height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: #161C2A;";
+const rows = week.map((r) => ({ ...r, style: base + (r.isNew ? ' background: #FDE6D6;' : ' background: #FFFFFF;') }));
+const wait = week.reduce((s, r) => s + (parseFloat(r.wait) || 0), 0);
+return { rows, count: week.length, waitTotal: wait.toFixed(2) };
+}
+}
+</script>
+</body>
+</html>

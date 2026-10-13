@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# local data store (dev only) and secrets
+.data/
+.env
+.env.local
+.env.*.local
+
+# real ticket photos stay out of git until we know they're OK to share
+samples/*
+!samples/README.md
+!samples/answers.example.csv
